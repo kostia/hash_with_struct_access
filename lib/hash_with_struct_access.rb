@@ -1,5 +1,5 @@
 class HashWithStructAccess < Hash
-  VERSION = "0.0.1"
+  VERSION = "0.0.2"
 
   def initialize(hash = {})
     hash.each_pair do |key, value|

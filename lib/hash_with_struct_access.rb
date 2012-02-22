@@ -11,4 +11,9 @@ class HashWithStructAccess < Hash
   def method_missing(method_name)
     self[method_name] || self[method_name.to_s] || super
   end
+
+  # Method stub to be overriden by plugins
+  def self.compute_path(path)
+    path
+  end
 end

@@ -72,4 +72,8 @@ class HashWithStructAccessTest < Test::Unit::TestCase
     assert_equal(HashLike.call_me_with_options(HashWithStructAccess.new(:foo => {:bar => :baz})),
         HashLike.call_me_with_options(:foo => {:bar => :baz}))
   end
+
+  def test_should_have_dummy_method_for_path_computation
+    assert_equal(HashWithStructAccess.compute_path("/foo/bar"), "/foo/bar")
+  end
 end

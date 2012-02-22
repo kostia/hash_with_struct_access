@@ -1,12 +1,19 @@
 Hash object with struct access.
 Main purpose is to be a configuration object.
 
-* It can't be modified after initialization
-* All keys will be stringified
+*Warning*: It can't be modified after initialization.
 
 ```ruby
-hash = HashWithStructAccess.new(:foo => {:bar => :baz})
-hash.foo # => {"bar" => :baz}
-hash.foo.bar => :baz
+# Simple example
+hash = HashWithStructAccess.new(:foo => {:bar => 42})
+hash.foo #=> {:bar => 42}
+hash.foo.bar #=> 42
+
+# More complex example
+hash = HashWithStructAccess.new(:foo => {(o = Object.new) => {"bar" => {1 => :baz}}})
+hash.foo #=> {o => {"bar" => {1 => :baz}}}
+hash.foo[o] #=> {"bar" => {1 => :baz}}
+hash.foo[o].bar #=> {1 => :baz}
+hash.foo[o].bar[1] #=> :baz
 ```
 

@@ -1,79 +1,74 @@
 require "./test/test_helper"
 
-
-class HashWithStructAccessTest < Test::Unit::TestCase
-  def test_should_be_kind_of_hash
-    assert(HashWithStructAccess.new(:foo => :bar).kind_of?(Hash))
+describe HashWithStructAccess do
+  it "should be kind of hash" do
+    HashWithStructAccess.new(:foo => :bar).must_be_kind_of(Hash)
   end
 
-  def test_should_be_initializable_by_hash_object
+  it "should be initializable by hash object" do
     hash = HashWithStructAccess.new({:foo => {:bar => :baz}})
-    assert_equal(hash.to_hash, {:foo => {:bar => :baz}})
+    hash.to_hash.must_equal({:foo => {:bar => :baz}})
   end
 
-  def test_should_be_initializable_by_options
+  it "should be initializable by options" do
     hash = HashWithStructAccess.new(:foo => {:bar => :baz})
-    assert_equal(hash.to_hash, {:foo => {:bar => :baz}})
+    hash.to_hash.must_equal({:foo => {:bar => :baz}})
   end
 
-  def test_should_be_initializable_with_hash_like_objects
+  it "should be initializable by hash like objects" do
     hash_like = HashLike.new
     hash_like[:foo] = {:bar => :baz}
     hash = HashWithStructAccess.new(hash_like)
-    assert_equal(hash.to_hash, {:foo => {:bar => :baz}})
+    hash.to_hash.must_equal({:foo => {:bar => :baz}})
   end
 
-  def test_should_be_initializable_with_nothing_given
+  it "should be initializable by nothing" do
     hash = HashWithStructAccess.new
-    assert_equal(hash.keys, [])
-    assert_equal(hash.values, [])
+    hash.to_hash.must_equal({})
   end
 
-  def test_should_convert_to_hash_properly
+  it "should convert to hash properly" do
     o = Object.new
     hash = {:foo => {1 => {o => "bar"}}}
-    assert_equal(HashWithStructAccess.new(hash).to_hash, hash)
+    HashWithStructAccess.new(hash).to_hash.must_equal(hash)
   end
 
-  def test_should_be_able_to_handle_numerical_keys
+  it "should be able to handle numerical keys" do
     hash = HashWithStructAccess.new(:foo => {1 => {:bar => :baz}})
-    assert_equal(hash.foo[1].bar, :baz)
+    hash.foo[1].bar.must_equal(:baz)
   end
 
-  def test_should_be_able_to_hadle_object_keys
+  it "should be able to handle object keys" do
     o1, o2 = Object.new, Object.new
     hash = HashWithStructAccess.new(o1 => {:foo => {o2 => {:bar => :baz}}})
-    assert_equal(hash[o1].foo[o2].bar, :baz)
+    hash[o1].foo[o2].bar.must_equal(:baz)
   end
 
-  def test_should_behave_like_deep_struct
+  it "should behave like deep struct" do
     hash = HashWithStructAccess.new(:foo => {"bar" => {:baz => 42}})
-    assert_equal(hash.foo.bar.baz, 42)
+    hash.foo.bar.baz.must_equal(42)
   end
 
-  def test_should_convert_subhashes_to_hashes_with_struct_access
+  it "should convert subhashes to hashes with struct access" do
     hash = HashWithStructAccess.new(:foo => {"bar" => {:baz => 42}})
-    assert(hash.foo.kind_of?(HashWithStructAccess))
-    assert(hash.foo.bar.kind_of?(HashWithStructAccess))
+    hash.foo.must_be_kind_of(HashWithStructAccess)
+    hash.foo.bar.must_be_kind_of(HashWithStructAccess)
   end
 
   # The main purpose of HashWithStructAccess is to be a configuration object,
   # so it would be not such a good idea to modify a configuration object at the runtime.
-  def test_should_not_allow_modifications_after_initialization
+  it "should not allow modifications after initialization" do
     hash = HashWithStructAccess.new(:foo => :bar)
-    begin
-      hash[:foo] = :baz
-    rescue RuntimeError => e
-      assert_equal(e.message, "can't modify frozen HashWithStructAccess")
-    end
+    Proc.new { hash[:foo] = :baz }.must_raise(RuntimeError,
+        "can't modify frozen HashWithStructAccess")
   end
 
-  def test_should_be_able_to_act_as_method_options
-    assert_equal(HashLike.call_me_with_options(HashWithStructAccess.new(:foo => {:bar => :baz})),
+  it "should be able to act as method options" do
+    HashLike.call_me_with_options(HashWithStructAccess.new(:foo => {:bar => :baz})).must_equal(
         HashLike.call_me_with_options(:foo => {:bar => :baz}))
   end
 
-  def test_should_have_dummy_method_for_path_computation
-    assert_equal(HashWithStructAccess.compute_path("/foo/bar"), "/foo/bar")
+  it "should have dummy method for path computation" do
+    HashWithStructAccess.compute_path("/foo/bar").must_equal("/foo/bar")
   end
 end

@@ -11,8 +11,10 @@ Gem::Specification.new do |gem|
   gem.authors = ["Kostiantyn Kahanskyi"]
   gem.email = %w(kostiantyn.kahanskyi@googlemail.com)
   gem.files = `git ls-files`.split("\n")
-  gem.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
+  gem.test_files = `git ls-files -- test/*`.split("\n")
   gem.require_paths = %w(lib)
   gem.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
+  gem.add_development_dependency("minitest")
   gem.add_development_dependency("rake")
+  gem.add_development_dependency("turn")
 end

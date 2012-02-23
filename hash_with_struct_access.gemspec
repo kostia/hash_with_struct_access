@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
   gem.test_files = `git ls-files -- test/*`.split("\n")
   gem.require_paths = %w(lib)
   gem.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
+  gem.required_ruby_version = ">= 1.9.3"
   gem.add_development_dependency("minitest")
   gem.add_development_dependency("rake")
   gem.add_development_dependency("turn")
